@@ -1,0 +1,37 @@
+query searchUsers($query: String!, $after: String) {
+  search(query: $query, after: $after, type: USER, first: 10) {
+    nodes {
+      ... on User {
+        name
+        avatarUrl
+        bio
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    userCount
+    repositoryCount
+  }
+}
+
+query searchRepositories($query: String!, $after: String) {
+  search(query: $query, after: $after, type: REPOSITORY, first: 10) {
+    nodes {
+      ... on Repository {
+        nameWithOwner
+        description
+        forkCount
+        updatedAt
+        stargazerCount
+      }
+    }
+    pageInfo {
+      endCursor
+      hasNextPage
+    }
+    userCount
+    repositoryCount
+  }
+}

@@ -1,10 +1,19 @@
-import './App.css';
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import AppRouter from "./routes";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: Infinity,
+    },
+  },
+});
 
 function App() {
   return (
-    <div className="App">
-
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AppRouter />
+    </QueryClientProvider>
   );
 }
 
