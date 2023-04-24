@@ -1,5 +1,5 @@
-query searchUsers($query: String!, $after: String) {
-  search(query: $query, after: $after, type: USER, first: 10) {
+query searchUsers($query: String!, $after: String, $before: String, $first: Int, $last: Int) {
+  search(query: $query, after: $after, type: USER, first: $first, last: $last, before: $before) {
     nodes {
       ... on User {
         name
@@ -10,15 +10,17 @@ query searchUsers($query: String!, $after: String) {
     }
     pageInfo {
       endCursor
+      startCursor
       hasNextPage
+      hasPreviousPage
     }
     userCount
     repositoryCount
   }
 }
 
-query searchRepositories($query: String!, $after: String) {
-  search(query: $query, after: $after, type: REPOSITORY, first: 10) {
+query searchRepositories($query: String!, $after: String, $before: String, $first: Int, $last: Int) {
+  search(query: $query, after: $after, type: REPOSITORY, first: $first, last: $last, before: $before) {
     nodes {
       ... on Repository {
         nameWithOwner
@@ -30,14 +32,16 @@ query searchRepositories($query: String!, $after: String) {
     }
     pageInfo {
       endCursor
+      startCursor
       hasNextPage
+      hasPreviousPage
     }
     userCount
     repositoryCount
   }
 }
 
-query getUser($login: String!, $cursor: String) {
+query getUser($login: String!, $after: String, $before: String, $first: Int, $last: Int) {
   user(login: $login) {
     name
     login
@@ -50,7 +54,7 @@ query getUser($login: String!, $cursor: String) {
     following {
       totalCount
     }
-    repositories(first: 10, after: $cursor) {
+    repositories(after: $after, first: $first, last: $last, before: $before) {
       nodes {
         name
         nameWithOwner
@@ -65,6 +69,12 @@ query getUser($login: String!, $cursor: String) {
         }
       }
       totalCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+        hasPreviousPage
+      }
     }
   }
 }

@@ -29006,31 +29006,47 @@ export enum WorkflowState {
 export type SearchUsersQueryVariables = Exact<{
   query: Scalars['String'];
   after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type SearchUsersQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', userCount: number, repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | { __typename?: 'User', name?: string | null, avatarUrl: any, bio?: string | null, login: string } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+export type SearchUsersQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', userCount: number, repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository' } | { __typename?: 'User', name?: string | null, avatarUrl: any, bio?: string | null, login: string } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } };
 
 export type SearchRepositoriesQueryVariables = Exact<{
   query: Scalars['String'];
   after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', userCount: number, repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', nameWithOwner: string, description?: string | null, forkCount: number, updatedAt: any, stargazerCount: number } | { __typename?: 'User' } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
+export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', userCount: number, repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', nameWithOwner: string, description?: string | null, forkCount: number, updatedAt: any, stargazerCount: number } | { __typename?: 'User' } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } };
 
 export type GetUserQueryVariables = Exact<{
   login: Scalars['String'];
-  cursor?: InputMaybe<Scalars['String']>;
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  last?: InputMaybe<Scalars['Int']>;
 }>;
 
 
-export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name?: string | null, login: string, createdAt: any, bio?: string | null, avatarUrl: any, followers: { __typename?: 'FollowerConnection', totalCount: number }, following: { __typename?: 'FollowingConnection', totalCount: number }, repositories: { __typename?: 'RepositoryConnection', totalCount: number, nodes?: Array<{ __typename?: 'Repository', name: string, nameWithOwner: string, description?: string | null, createdAt: any, updatedAt: any, stargazerCount: number, forkCount: number, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null> | null } } | null };
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name?: string | null, login: string, createdAt: any, bio?: string | null, avatarUrl: any, followers: { __typename?: 'FollowerConnection', totalCount: number }, following: { __typename?: 'FollowingConnection', totalCount: number }, repositories: { __typename?: 'RepositoryConnection', totalCount: number, nodes?: Array<{ __typename?: 'Repository', name: string, nameWithOwner: string, description?: string | null, createdAt: any, updatedAt: any, stargazerCount: number, forkCount: number, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, startCursor?: string | null, hasNextPage: boolean, hasPreviousPage: boolean } } } | null };
 
 
 export const SearchUsersDocument = `
-    query searchUsers($query: String!, $after: String) {
-  search(query: $query, after: $after, type: USER, first: 10) {
+    query searchUsers($query: String!, $after: String, $before: String, $first: Int, $last: Int) {
+  search(
+    query: $query
+    after: $after
+    type: USER
+    first: $first
+    last: $last
+    before: $before
+  ) {
     nodes {
       ... on User {
         name
@@ -29041,7 +29057,9 @@ export const SearchUsersDocument = `
     }
     pageInfo {
       endCursor
+      startCursor
       hasNextPage
+      hasPreviousPage
     }
     userCount
     repositoryCount
@@ -29062,8 +29080,15 @@ export const useSearchUsersQuery = <
       options
     );
 export const SearchRepositoriesDocument = `
-    query searchRepositories($query: String!, $after: String) {
-  search(query: $query, after: $after, type: REPOSITORY, first: 10) {
+    query searchRepositories($query: String!, $after: String, $before: String, $first: Int, $last: Int) {
+  search(
+    query: $query
+    after: $after
+    type: REPOSITORY
+    first: $first
+    last: $last
+    before: $before
+  ) {
     nodes {
       ... on Repository {
         nameWithOwner
@@ -29075,7 +29100,9 @@ export const SearchRepositoriesDocument = `
     }
     pageInfo {
       endCursor
+      startCursor
       hasNextPage
+      hasPreviousPage
     }
     userCount
     repositoryCount
@@ -29096,7 +29123,7 @@ export const useSearchRepositoriesQuery = <
       options
     );
 export const GetUserDocument = `
-    query getUser($login: String!, $cursor: String) {
+    query getUser($login: String!, $after: String, $before: String, $first: Int, $last: Int) {
   user(login: $login) {
     name
     login
@@ -29109,7 +29136,7 @@ export const GetUserDocument = `
     following {
       totalCount
     }
-    repositories(first: 10, after: $cursor) {
+    repositories(after: $after, first: $first, last: $last, before: $before) {
       nodes {
         name
         nameWithOwner
@@ -29124,6 +29151,12 @@ export const GetUserDocument = `
         }
       }
       totalCount
+      pageInfo {
+        endCursor
+        startCursor
+        hasNextPage
+        hasPreviousPage
+      }
     }
   }
 }
