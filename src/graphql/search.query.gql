@@ -5,6 +5,7 @@ query searchUsers($query: String!, $after: String) {
         name
         avatarUrl
         bio
+        login
       }
     }
     pageInfo {
