@@ -55,8 +55,10 @@ const Search: React.FC = () => {
         <div className="flex flex-1">
           <ul role="list" className="divide-y divide-gray-100 w-full">
             {searchType === "user"
-              ? users?.map((item) => <UserListItem item={item as Partial<User>} />)
-              : repositories?.map((item) => <RepositoryListItem item={item as Repository}></RepositoryListItem>)}
+              ? users?.map((item, index) => <UserListItem item={item as Partial<User>} key={index} />)
+              : repositories?.map((item, index) => (
+                  <RepositoryListItem item={item as Repository} key={index}></RepositoryListItem>
+                ))}
           </ul>
         </div>
       </div>

@@ -29019,6 +29019,14 @@ export type SearchRepositoriesQueryVariables = Exact<{
 
 export type SearchRepositoriesQuery = { __typename?: 'Query', search: { __typename?: 'SearchResultItemConnection', userCount: number, repositoryCount: number, nodes?: Array<{ __typename?: 'App' } | { __typename?: 'Discussion' } | { __typename?: 'Issue' } | { __typename?: 'MarketplaceListing' } | { __typename?: 'Organization' } | { __typename?: 'PullRequest' } | { __typename?: 'Repository', nameWithOwner: string, description?: string | null, forkCount: number, updatedAt: any, stargazerCount: number } | { __typename?: 'User' } | null> | null, pageInfo: { __typename?: 'PageInfo', endCursor?: string | null, hasNextPage: boolean } } };
 
+export type GetUserQueryVariables = Exact<{
+  login: Scalars['String'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetUserQuery = { __typename?: 'Query', user?: { __typename?: 'User', name?: string | null, login: string, createdAt: any, bio?: string | null, avatarUrl: any, followers: { __typename?: 'FollowerConnection', totalCount: number }, following: { __typename?: 'FollowingConnection', totalCount: number }, repositories: { __typename?: 'RepositoryConnection', totalCount: number, nodes?: Array<{ __typename?: 'Repository', name: string, nameWithOwner: string, description?: string | null, createdAt: any, updatedAt: any, stargazerCount: number, forkCount: number, primaryLanguage?: { __typename?: 'Language', name: string, color?: string | null } | null } | null> | null } } | null };
+
 
 export const SearchUsersDocument = `
     query searchUsers($query: String!, $after: String) {
@@ -29085,5 +29093,51 @@ export const useSearchRepositoriesQuery = <
     useQuery<SearchRepositoriesQuery, TError, TData>(
       ['searchRepositories', variables],
       fetcher<SearchRepositoriesQuery, SearchRepositoriesQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, SearchRepositoriesDocument, variables),
+      options
+    );
+export const GetUserDocument = `
+    query getUser($login: String!, $cursor: String) {
+  user(login: $login) {
+    name
+    login
+    createdAt
+    bio
+    avatarUrl
+    followers {
+      totalCount
+    }
+    following {
+      totalCount
+    }
+    repositories(first: 10, after: $cursor) {
+      nodes {
+        name
+        nameWithOwner
+        description
+        createdAt
+        updatedAt
+        stargazerCount
+        forkCount
+        primaryLanguage {
+          name
+          color
+        }
+      }
+      totalCount
+    }
+  }
+}
+    `;
+export const useGetUserQuery = <
+      TData = GetUserQuery,
+      TError = unknown
+    >(
+      dataSource: { endpoint: string, fetchParams?: RequestInit },
+      variables: GetUserQueryVariables,
+      options?: UseQueryOptions<GetUserQuery, TError, TData>
+    ) =>
+    useQuery<GetUserQuery, TError, TData>(
+      ['getUser', variables],
+      fetcher<GetUserQuery, GetUserQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetUserDocument, variables),
       options
     );

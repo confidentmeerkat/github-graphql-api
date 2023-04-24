@@ -36,3 +36,35 @@ query searchRepositories($query: String!, $after: String) {
     repositoryCount
   }
 }
+
+query getUser($login: String!, $cursor: String) {
+  user(login: $login) {
+    name
+    login
+    createdAt
+    bio
+    avatarUrl
+    followers {
+      totalCount
+    }
+    following {
+      totalCount
+    }
+    repositories(first: 10, after: $cursor) {
+      nodes {
+        name
+        nameWithOwner
+        description
+        createdAt
+        updatedAt
+        stargazerCount
+        forkCount
+        primaryLanguage {
+          name
+          color
+        }
+      }
+      totalCount
+    }
+  }
+}
