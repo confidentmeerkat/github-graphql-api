@@ -18,6 +18,7 @@ GraphQL API challenge to build react app that's similar to Github.
 ## How to run
 
 - Install node modules: `yarn install`
+- Replace github api key in the src/config with your own access key
 - Start the project: `yarn start`
 
 ### URLS
