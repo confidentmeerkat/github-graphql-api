@@ -2,6 +2,9 @@
 
 GraphQL API challenge to build react app that's similar to Github.
 
+
+![](screenshots/Screenshot%202023-04-24%20080847.jpg)![](screenshots/Screenshot%202023-04-24%20080909.jpg)![](screenshots/Screenshot%202023-04-24%20080935.jpg)
+
 ## Functionalities
 
 - Search users and repositories
